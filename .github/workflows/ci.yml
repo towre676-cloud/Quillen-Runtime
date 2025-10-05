@@ -1,0 +1,14 @@
+name: ci
+on:
+  push: { branches: [ main ] }
+  pull_request: { branches: [ main ] }
+jobs:
+  check-stubs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          test -f docs/Section-2-Foundational-Definitions.md
+          test -f docs/Section-3-Navier-Stokes-Bifurcation.md
+          test -f docs/Sections-4-10-Propagation-Edits.md
+          test -f receipts/schema.sample.json
