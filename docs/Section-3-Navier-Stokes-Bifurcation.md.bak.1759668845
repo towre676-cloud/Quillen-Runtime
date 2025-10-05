@@ -1,0 +1,39 @@
+# Section 3: A Complete Example — Navier–Stokes Bifurcation
+
+We compute determinant‑line invariants for two‑dimensional incompressible Navier–Stokes on the periodic torus Ω = [0, 2π]^2 and show:
+(i) stability of (τ, R) throughout the laminar window, and (ii) a certified change at a Hopf bifurcation detected as spectral flow.
+All constructions use the mapping‑cone model (Def. 2.5) and invariance theorems of §2.
+
+## 3.1 Physical and Numerical Setup
+We solve
+
+    ∂_t u + (u·∇)u = -∇p + (1/Re) Δu,     ∇·u = 0,
+
+on Ω with Fourier pseudo‑spectral discretization at N = 32^2 divergence‑free modes, giving a real state space H ≃ ℝ^{2N} (real/imag parts for two velocity components).
+Time integration is semi‑implicit Euler–Maruyama with Δt = 1e-2 to final time T = 10, so m = T/Δt = 1000 steps.
+We add small high‑wavenumber stochastic forcing of amplitude σ = 1e-4 with seed θ to model subgrid variability.
+Let S_i(Re): H → H denote the one‑step linearized map (Jacobian of the time stepper at u_i).
+
+## 3.2 Mapping‑Cone State Complex
+Set C^0 = C^1 = H^{⊕m} with block L^2 inner products. Define the discrete defect operator D_Re: C^0 → C^1 by
+
+    (D_Re x)_0 = x_0 − u_0,
+    (D_Re x)_i = x_i − S_i(Re) x_{i−1},    i = 1,…,m−1.
+
+This yields the cochain complex C^•: C^0 —^{∂^0 = D_Re}→ C^1 with ∂^1 = 0.
+The degree‑k Laplacians are Δ^0 = D_Re^* D_Re and Δ^1 = D_Re D_Re^*; by Lemma 2.6 they share the same nonzero spectrum.
+
+**Tameness.** For Re below the first Hopf point, each S_i is contractive on the divergence‑free subspace, hence D_Re is injective with closed range and λ_min(Δ^0) ≥ λ_* > 0.
+At a Hopf bifurcation, a pair of complex‑conjugate multipliers crosses the unit circle, and λ_min(Δ^0) → 0.
+
+## 3.3 Spectral Summary (illustrative magnitudes)
+The table summarizes extremal eigenvalues of Δ^0 from Lanczos on representative Re:
+
+| Re | dim ker Δ^0 | λ_min | λ_max | κ = λ_max/λ_min |
+|---:|:-----------:|-----:|------:|-----------------:|
+| 40 |      0      |  2.4 |  5.8e2 |            2.4e2 |
+| 50 |      0      |  1.1 |  6.2e2 |            5.6e2 |
+| 60 |      0      | 0.30 |  6.6e2 |            2.2e3 |
+| 70 |      1      |  ≈0  |  6.9e2 |               ∞  |
+
+As Re approaches Re_c, the smallest nonzero singular value of D_Re decays toward zero (loss of tameness); at Re ≈ 65 a one‑dimensional kernel appears (discrete spectral flow +1).

@@ -1,5 +1,65 @@
 {
   "receipt_version": "1.0.0",
-  "run_id": "UUID",
-  "timestamp_utc": "ISO-8601"
+  "run_id": "00000000-0000-0000-0000-000000000000",
+  "timestamp_utc": "1970-01-01T00:00:00Z",
+  "kernel_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+
+  "complex_profile": { "dims": ["H^m","H^m"], "model": "mapping_cone_D" },
+
+  "gauge_normalization_data": {
+    "inner_product_basis": "Fourier_L2",
+    "adjoint_convention": "Hermitian_conjugate",
+    "conformal_factors": { "C^0": 0.0, "C^1": 0.0 },
+    "discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+
+  "spectra": {
+    "degree_0_operator": "Delta0 = D_star_D",
+    "shared_nonzero_with_degree_1": true,
+    "lambda_min": 0.0,
+    "lambda_max": 0.0,
+    "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
+    "trace_estimator": "hutch++_64_probes",
+    "method": "Lanczos_200_iter"
+  },
+
+  "residue": {
+    "value": 0.0,
+    "error": 0.0,
+    "method": "zeta_prime_quadrature",
+    "regularization": "heat_kernel + uv_cutoff_1e-8"
+  },
+
+  "tau": {
+    "phase": 0.0,
+    "modulus": 1.0,
+    "error": 0.0,
+    "path_discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "spectral_flow": { "winding_number": 0, "crossings": [] }
+  },
+
+  "entropy_witness": {
+    "kappa_max": 0.0,
+    "confidence": 0.95,
+    "nondeterminism_params": { "random_seed_base": 0, "sample_count": 0 }
+  },
+
+  "tameness": {
+    "kappa_uniform": 0.0,
+    "lambda_gap": 0.0,
+    "regime": "unspecified"
+  },
+
+  "dependencies": {
+    "merkle_root": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "input_data": [],
+    "code_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "capsule_manifest": []
+  },
+
+  "signature": {
+    "algorithm": "ed25519",
+    "public_key": "00",
+    "signature_bytes": "00"
+  }
 }
