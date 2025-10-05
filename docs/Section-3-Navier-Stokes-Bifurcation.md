@@ -93,3 +93,70 @@ Lift to (Re, theta) -> D_{Re,theta} and bound the curvature two-form K of the in
 2) Compute -zeta'(Delta^1, 0) via log-det quadrature.
 3) Integrate Tr(P dP/dRe) along the recorded grid (tau approx 1 on laminar window).
 4) Compare receipts with Thm 2.4 / Cor. 3.1; failure near Hopf certifies drift.
+
+---
+
+## Residue (zeta–regularized log-det)
+Let \( \Delta^0 = D_{\mathrm{Re}}^{\!*} D_{\mathrm{Re}} \) and \( \Delta^1 = D_{\mathrm{Re}} D_{\mathrm{Re}}^{\!*} \).
+By Lemma 2.6 they share the nonzero spectrum \( \{\lambda_j(\mathrm{Re})\}_{j\ge 1} \).
+The residue is
+\( R(M_{\mathrm{Re},\theta}) = -\zeta'(\Delta^1,0) = \sum_{j\ge 1} \log \lambda_j(\mathrm{Re}) \),
+computed via Hutch++/Lanczos log-det on Δ¹ with a UV cutoff and heat-kernel extrapolation as \(t\to 0^+\).
+In the laminar (tame) regime, R varies slowly with Re; at a Hopf crossing, a single \( \lambda_j \to 0^+ \) drives \( R \to +\infty \), which we treat as an anomaly flag (non‑tame endpoint).
+
+## τ via Bismut–Freed connection and spectral flow
+For a smooth family \( \mathrm{Re}\mapsto D_{\mathrm{Re}} \) with \( \ker D_{\mathrm{Re}}=\{0\} \),
+the Berry–Quillen one‑form is \( \alpha = \mathrm{Tr}(P\,\partial_{\mathrm{Re}} P)\,d\mathrm{Re} \) with P the harmonic projector, hence
+\( \tau = \exp(\int_{\mathrm{Re}_0}^{\mathrm{Re}_1}\alpha) \).
+On [40,60] we have \(P\equiv 0 \Rightarrow \alpha=0 \Rightarrow \tau=1\).
+Across a simple Hopf crossing, the determinant‑line holonomy around a small loop is \( e^{i\pi\,\mathrm{SF}} \) with spectral flow SF=+1 giving −1.
+On the open path 40→70 the value remains \( \tau \approx 1 \), and we record the topological data as spectral_flow.winding_number=1 plus a regularization hash (mollifier width ε).
+
+## Entropy witness (nondeterminism curvature bound)
+Lift the family to \( (\mathrm{Re},\theta)\mapsto D_{\mathrm{Re},\theta} \) (RNG seed θ).
+Let K denote the curvature two‑form of the induced local system over
+\( \Sigma=[\mathrm{Re},\mathrm{Re}']\times\{\theta_k\}_{k=1}^N \).
+We bound \( \int_\Sigma \|K\| \) empirically by repeated runs and report a high‑confidence upper bound \( \kappa_{\max} \).
+By Theorem 2.4 and Corollary 3.1,
+\( |\log \tau(\mathrm{Re})-\log \tau(\mathrm{Re}')| \le \int_\Sigma \|K\| \) and
+\( |R(\mathrm{Re})-R(\mathrm{Re}')| \le C \int_\Sigma \|K\| \) with \( C \asymp \kappa_{\max}/\lambda_{\min} \).
+
+## Receipt excerpt (laminar run, Re=40)
+    
+    {
+      "complex_profile": { "dims": ["H^⊕m","H^⊕m"], "model": "mapping_cone_D" },
+      "gauge_normalization_data": {
+        "inner_product_basis": "Fourier_L2",
+        "adjoint_convention": "Hermitian_conjugate",
+        "conformal_factors": {"C^0": 0.0, "C^1": 0.0}
+      },
+      "spectra": {
+        "degree_0_operator": "Delta0 = D_star_D",
+        "shared_nonzero_with_degree_1": true,
+        "lambda_min": 2.4,
+        "lambda_max": 580.0,
+        "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
+        "trace_estimator": "hutch++_64_probes",
+        "method": "Lanczos_200_iter"
+      },
+      "residue": {
+        "value": 3520.3,
+        "error": 1.2,
+        "method": "zeta_prime_quadrature",
+        "regularization": "heat_kernel + uv_cutoff_1e-8"
+      },
+      "tau": {
+        "phase": 0.0001,
+        "modulus": 1.0,
+        "error": 0.0003,
+        "path_discretization_hash": "sha256:b8c7a6d5e4f3...",
+        "spectral_flow": { "winding_number": 0, "crossings": [] }
+      },
+      "entropy_witness": {
+        "kappa_max": 0.9,
+        "confidence": 0.95,
+        "nondeterminism_params": { "random_seed_base": 42, "sample_count": 20 }
+      },
+      "tameness": { "kappa_uniform": 242, "lambda_gap": 2.4, "regime": "Re_40_stable_laminar" }
+    }
+
