@@ -3,7 +3,7 @@ on:
   push: { branches: [ main ] }
   pull_request: { branches: [ main ] }
 jobs:
-  finite-math-audit:
+  spectral-certificates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,6 +13,6 @@ jobs:
       - name: Exact algebra and convention checks
         run: python -m unittest discover -s tests -v
       - name: Numerical illustration
-        run: python examples/bifurcation_audit.py
+        run: python examples/hopf_spectra.py
       - name: Parse illustrative receipt
         run: python -m json.tool receipts/schema.sample.json > /dev/null

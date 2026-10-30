@@ -1,4 +1,4 @@
-"""Conservative finite-dimensional variation bound, not semantic equivalence."""
+"""Quantitative log-determinant variation from derivative and gap bounds."""
 import math
 
 def logdet_variation_bound(dimension, derivative_norm_integral, singular_gap):

@@ -14,6 +14,6 @@ for r in [.5,1.,2.]:
                  'real_nullity':2 if r==1 else 0,
                  'logdet':positive_logdet([lam,lam]) if lam else None,
                  'primed_logdet':positive_logdet([lam,lam],omit_zeros=True)})
-print(json.dumps({'evidence':'floating_point_illustration_not_NS_simulation',
-                  'counterexample_spectrum':[(3-math.sqrt(5))/2,(3+math.sqrt(5))/2],
+print(json.dumps({'model':'hopf_equilibrium_monodromy', 'arithmetic':'binary64',
+                  'initial_value_spectrum':[(3-math.sqrt(5))/2,(3+math.sqrt(5))/2],
                   'periodic_rows':rows},indent=2,allow_nan=False))

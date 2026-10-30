@@ -29,12 +29,43 @@ def mul(a,b):
     return [[sum(x*y for x,y in zip(row,col)) for col in zip(*b)] for row in a]
 
 
-class Audit(unittest.TestCase):
+class EvolutionCertificates(unittest.TestCase):
     def test_iv_arbitrary_exact_blocks(self):
         steps = [[[2,3],[5,7]], [[-4,2],[8,9]], [[0,1],[1,0]]]
         a = defect_matrix(steps, 2)
         self.assertEqual(det(a), 1)
         self.assertEqual(det(mul(list(map(list,zip(*a))),a)), 1)
+
+    def test_nilpotent_inverse_reconstructs_residuals(self):
+        # Independent propagation formula applied to every residual basis vector.
+        steps = [[[F(1, 2), 3], [2, -1]], [[0, 2], [F(3, 2), 1]]]
+        l = defect_matrix(steps, 2)
+        n = len(l)
+        identity = [[int(i == j) for j in range(n)] for i in range(n)]
+        inverse_columns = []
+        for column in zip(*identity):
+            state = list(column[:2])
+            trajectory = list(state)
+            for k, step in enumerate(steps):
+                state = [column[2*(k+1)+i] + sum(a*b for a,b in zip(row, state))
+                         for i,row in enumerate(step)]
+                trajectory.extend(state)
+            inverse_columns.append(trajectory)
+        inverse = list(map(list, zip(*inverse_columns)))
+        self.assertEqual(mul(l, inverse), identity)
+        self.assertEqual(mul(inverse, l), identity)
+        # Unit shift is nilpotent, independently confirming the finite inverse.
+        shift = [[identity[i][j]-l[i][j] for j in range(n)] for i in range(n)]
+        self.assertEqual(mul(shift, mul(shift, shift)), [[0]*n for _ in range(n)])
+
+    def test_nonresonant_rotation_spectrum(self):
+        # T=pi/2: M=r*J, so C^T C=(1+r^2)I, even at mu=0.
+        for r in (F(1, 2), F(1), F(2)):
+            monodromy = [[0, -r], [r, 0]]
+            c = defect_matrix([monodromy], 2, periodic=True)
+            self.assertEqual(mul(list(map(list, zip(*c))), c),
+                             [[1+r*r, 0], [0, 1+r*r]])
+            self.assertEqual(det(c), 1+r*r)
 
     def test_counterexample(self):
         a = defect_matrix([[[1]]], 1)
@@ -71,6 +102,8 @@ class Audit(unittest.TestCase):
         with self.assertRaises(ValueError): positive_logdet([-1])
         with self.assertRaises(ValueError): positive_logdet([float('nan')])
         self.assertLess(positive_logdet([1e-20,1]), 0)
+        self.assertAlmostEqual(positive_logdet([2, 8]) - positive_logdet([1, 4]),
+                               2*math.log(2))
 
     def test_signed_flow_and_square(self):
         # Finite-dimensional SF = endpoint negative inertia difference.

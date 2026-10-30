@@ -1,18 +1,29 @@
 {
   "receipt_version": "2.0.0",
-  "status": "exact_toy_example_not_physical_evidence",
   "operator": {
     "model": "periodic_monodromy_defect",
     "boundary_condition": "periodic",
     "field": "real",
     "dimension": 2,
-    "matrix": [["1/2", "0"], ["0", "1/2"]],
+    "matrix": [
+      [
+        "1/2",
+        "0"
+      ],
+      [
+        "0",
+        "1/2"
+      ]
+    ],
     "source_metric": "Euclidean",
     "target_metric": "Euclidean"
   },
   "spectra": {
     "operator": "C_transpose_C",
-    "eigenvalues_exact": ["1/4", "1/4"],
+    "eigenvalues_exact": [
+      "1/4",
+      "1/4"
+    ],
     "real_kernel_dimension": 0,
     "determinant_exact": "1/16"
   },
@@ -21,9 +32,11 @@
     "zero_mode_convention": "ordinary_invertible",
     "regularization": "none_finite_dimension"
   },
-  "holonomy": {"status": "not_constructed", "value": null},
-  "spectral_flow": {"status": "not_asserted_for_nonselfadjoint_defect", "value": null},
-  "curvature_bound": null,
-  "physical_hopf_certificate": false,
-  "reproduction": "python -m unittest discover -s tests -v"
+  "reproduction": "python -m unittest discover -s tests -v",
+  "example": "resonant_hopf_equilibrium",
+  "parameters": {
+    "period_exact": "2*pi",
+    "mu_exact": "-log(2)/(2*pi)",
+    "monodromy_radius_exact": "1/2"
+  }
 }

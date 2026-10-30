@@ -1,4 +1,4 @@
-"""Finite positive-spectrum log determinant; no zeta/UV extrapolation."""
+"""Finite spectral determinants with explicit zero-mode conventions."""
 import math
 
 def positive_logdet(eigenvalues, *, omit_zeros=False):
