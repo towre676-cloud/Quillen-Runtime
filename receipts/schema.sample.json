@@ -38,5 +38,17 @@
     "period_exact": "2*pi",
     "mu_exact": "-log(2)/(2*pi)",
     "monodromy_radius_exact": "1/2"
+  },
+  "operator_neighborhood_certificate": {
+    "metric": "Euclidean_operator_norm",
+    "radius_exact": "1/100",
+    "reference_singular_gap_exact": "1/2",
+    "guaranteed_singular_gap_exact": "49/100",
+    "absolute_logdet_error_bound_exact": "-4*log(49/50)",
+    "real_determinant_sign": 1,
+    "reference_residual_norm_upper_exact": "1/1000000",
+    "candidate_state_norm_upper_exact": "1",
+    "solution_error_upper_exact": "10001/490000",
+    "absolute_logdet_error_upper_rational": "4/49"
   }
 }

@@ -1,9 +1,13 @@
+import json
 import math
+from pathlib import Path
 import unittest
 from fractions import Fraction as F
 from src.core.mapping_cone import defect_matrix
 from src.invariants.zeta import positive_logdet
-from src.verification.check import logdet_variation_bound
+from src.verification.check import (logdet_variation_bound, singular_gap_bound,
+                                    logdet_perturbation_bound, solution_error_bound,
+                                    logdet_perturbation_rational_bound)
 
 
 def det(a):
@@ -110,6 +114,62 @@ class EvolutionCertificates(unittest.TestCase):
         start,end = [-1,1],[1,1]
         self.assertEqual(sum(x<0 for x in start)-sum(x<0 for x in end),1)
         self.assertEqual(sum(x*x<0 for x in start)-sum(x*x<0 for x in end),0)
+
+    def test_sharp_perturbation_and_state_error(self):
+        # Dhat=I, D=3I/4, xhat=b=(1,0): all three bounds are attained.
+        gap, error = F(1), F(1, 4)
+        self.assertEqual(singular_gap_bound(gap, error), F(3, 4))
+        exact_logdet_change = abs(positive_logdet([F(9, 16)]*2))
+        self.assertAlmostEqual(logdet_perturbation_bound(2, gap, error),
+                               exact_logdet_change)
+        true_state_error = abs(1-F(4, 3))
+        self.assertEqual(solution_error_bound(F(0), F(1), gap, error), true_state_error)
+
+    def test_reference_receipt_neighborhood(self):
+        receipt = json.loads((Path(__file__).resolve().parents[1] /
+                              'receipts/schema.sample.json').read_text())
+        proof = receipt['operator_neighborhood_certificate']
+        gap = F(proof['reference_singular_gap_exact'])
+        error = F(proof['radius_exact'])
+        actual_gap = gap-error
+        self.assertEqual(singular_gap_bound(gap, error),
+                         F(proof['guaranteed_singular_gap_exact']))
+        rational_bound = logdet_perturbation_rational_bound(2, gap, error)
+        self.assertEqual(rational_bound, F(proof['absolute_logdet_error_upper_rational']))
+        self.assertGreaterEqual(float(rational_bound), logdet_perturbation_bound(2, gap, error))
+        eta = F(proof['reference_residual_norm_upper_exact'])
+        state_norm = F(proof['candidate_state_norm_upper_exact'])
+        # Dhat=I/2, D=49I/100, xhat=(1,0), b=(1/2+eta,0).
+        # Both the reference residual and operator error point in the same direction.
+        direct_error = abs(1-(gap+eta)/actual_gap)
+        predicted = solution_error_bound(eta, state_norm, gap, error)
+        self.assertEqual(predicted, direct_error)
+        self.assertEqual(predicted, F(proof['solution_error_upper_exact']))
+        reference = [[F(x) for x in row] for row in receipt['operator']['matrix']]
+        self.assertEqual(reference, [[gap, 0], [0, gap]])
+        self.assertEqual(det(reference), gap*gap)
+        self.assertEqual(proof['real_determinant_sign'], 1)
+        exact_logdet_change = abs(positive_logdet([actual_gap**2]*2)
+                                 - positive_logdet([gap**2]*2))
+        self.assertAlmostEqual(logdet_perturbation_bound(2, gap, error),
+                               exact_logdet_change)
+
+    def test_non_scalar_operator_perturbation(self):
+        # Dhat=diag(2,3), D=[[2,1/4],[1/4,3]], ||D-Dhat||=1/4.
+        d = [[2, F(1, 4)], [F(1, 4), 3]]
+        true_gap = (5-math.sqrt(F(5, 4)))/2
+        self.assertGreater(true_gap, singular_gap_bound(2, F(1, 4)))
+        true_logdet_error = abs(2*math.log(float(det(d)/6)))
+        self.assertLess(true_logdet_error, logdet_perturbation_bound(2, 2, F(1, 4)))
+
+    def test_perturbation_domain(self):
+        self.assertEqual(logdet_perturbation_bound(2, 1, 0), 0)
+        self.assertEqual(solution_error_bound(F(1, 1000000), 1, F(1, 2)),
+                         F(1, 500000))
+        for gap,error in [(1,1), (1,2), (0,0), (1,-1), (float('nan'),0)]:
+            with self.assertRaises(ValueError): singular_gap_bound(gap, error)
+        with self.assertRaises(ValueError): logdet_perturbation_bound(1.5, 1, 0)
+        with self.assertRaises(ValueError): solution_error_bound(-1, 1, 1)
 
     def test_variation_bound(self):
         # D(t)=exp(t), 0<=t<=1: true variation 2, gap 1.

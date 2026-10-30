@@ -60,13 +60,25 @@ bound $(1-q)^2$. On any compact parameter interval with continuous finite step
 matrices, $L^{-1}$ remains bounded. Every member of the initial-value family is
 joined to the identity through the invertible path $I-tB$, $0\le t\le1$.
 
+For a computed trajectory $\widehat x$ with residual
+$r=L\widehat x-b$, Proposition 3.1 therefore gives the a posteriori estimate
+
+$$
+\|\widehat x-x\|_2\le\Gamma_m(q)\|r\|_2.
+$$
+
+For example, $q\le1/2$ gives $\Gamma_m(q)<2$ for every finite horizon.
+A residual norm at most $10^{-6}$ then bounds the trajectory error by
+$2\cdot10^{-6}$, independently of the number of stored states. This turns the
+inverse formula into a directly checkable accuracy criterion.
+
 The smallest exact example is $m=d=1$, where $L=[1]$. The first example with
 nontrivial propagation is
 
 $$
 L=\begin{pmatrix}1&0\\-1&1\end{pmatrix},\qquad
 L^*L=\begin{pmatrix}2&-1\\-1&1\end{pmatrix},\qquad
-\operatorname{spec}(L^*L)=\left\{\frac{3-\sqrt5}{2},\frac{3+\sqrt5}{2}\right\}.
+\mathrm{spec}(L^*L)=\left\{\frac{3-\sqrt5}{2},\frac{3+\sqrt5}{2}\right\}.
 $$
 
 It has a positive spectral gap, zero log determinant, and reciprocal eigenvalues.
@@ -121,6 +133,13 @@ closure selects the fixed vectors of $M$. Consequently, a periodic defect
 measures the multiplier-one eigenspace. For an autonomous periodic orbit the
 tangent direction belongs to this eigenspace, motivating a phase condition when
 solving for an orbit and its period.
+
+The reduction moves determinant and nullspace calculations from an $md$-dimensional
+trajectory space to the $d$-dimensional return map. Every reduced null vector
+lifts explicitly to the full trajectory. This saves the construction and
+factorization of the full block matrix when the target is a determinant or a
+periodic mode. The reduction concerns determinants and kernels; conditioning
+estimates also retain the norms of its coordinate transformations.
 
 ## 3.3 A complete resonance calculation
 
@@ -217,16 +236,49 @@ nonlinear information used in the Hopf conclusion.
 Signed spectral flow measures a different crossing. For the self-adjoint path
 
 $$
-B(t)=\operatorname{diag}(t,1),\qquad -1\le t\le1,
+B(t)=\mathrm{diag}(t,1),\qquad -1\le t\le1,
 $$
 
 the crossing form is positive on the one-dimensional kernel at zero, so
-$\operatorname{SF}(B)=+1$. Its square has eigenvalues $t^2,1$ and spectral
+$\mathrm{SF}(B)=+1$. Its square has eigenvalues $t^2,1$ and spectral
 flow zero. In the Hopf model, the Laplacian eigenvalues also meet zero from the
 positive side: their singularity records resonance, while the equilibrium pair
 $\mu\pm i$ records the direction of the stability change.
 
-## 3.5 Reproduction
+## 3.5 A quantitative return-map certificate
+
+The rational case $r=1/2$ supplies the reference monodromy $\widehat M=I/2$,
+two-dimensional reduced return defect $\widehat C=I/2$, and singular gap $s=1/2$. Suppose the monodromy
+of interest satisfies the norm-error enclosure
+$\|M-\widehat M\|_2\le1/100$. Since $C=I-M$, the same enclosure applies to
+$C-\widehat C$. Proposition 2.3 yields
+
+$$
+\sigma_{\min}(C)\ge\frac{49}{100},\qquad
+|R(C)-R(\widehat C)|\le-4\log(49/50)
+\approx0.080811.
+$$
+
+The fully rational upper bound $4/49$ also encloses the log-determinant error.
+A candidate reduced state with reference residual norm at most $10^{-6}$ and
+state norm at most one consequently has error bounded by
+
+$$
+\|\widehat x-x\|_2
+\le\frac{10^{-6}+1/100}{49/100}
+=\frac{10001}{490000}\approx0.0204102.
+$$
+
+This calculation shows exactly how a return-map approximation becomes a
+certificate: the monodromy error sets the invertibility margin and determinant
+tolerance, while the residual and state norm set the solution tolerance. Every
+real return defect in this norm ball also retains the positive determinant
+orientation of the reference. In the
+exact rational case the monodromy error is zero, reducing the state-error bound
+to twice the residual norm. Near the resonant parameter, the formula identifies
+the smaller operator error required to preserve a positive margin.
+
+## 3.6 Reproduction
 
 The standard-library implementation constructs both boundary operators. Exact
 rational checks verify the determinant reduction, kernel lift, nilpotent inverse,
