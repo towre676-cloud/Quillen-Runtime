@@ -1,65 +1,29 @@
 {
-  "receipt_version": "1.0.0",
-  "run_id": "00000000-0000-0000-0000-000000000000",
-  "timestamp_utc": "1970-01-01T00:00:00Z",
-  "kernel_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-
-  "complex_profile": { "dims": ["H^m","H^m"], "model": "mapping_cone_D" },
-
-  "gauge_normalization_data": {
-    "inner_product_basis": "Fourier_L2",
-    "adjoint_convention": "Hermitian_conjugate",
-    "conformal_factors": { "C^0": 0.0, "C^1": 0.0 },
-    "discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  "receipt_version": "2.0.0",
+  "status": "exact_toy_example_not_physical_evidence",
+  "operator": {
+    "model": "periodic_monodromy_defect",
+    "boundary_condition": "periodic",
+    "field": "real",
+    "dimension": 2,
+    "matrix": [["1/2", "0"], ["0", "1/2"]],
+    "source_metric": "Euclidean",
+    "target_metric": "Euclidean"
   },
-
   "spectra": {
-    "degree_0_operator": "Delta0 = D_star_D",
-    "shared_nonzero_with_degree_1": true,
-    "lambda_min": 0.0,
-    "lambda_max": 0.0,
-    "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
-    "trace_estimator": "hutch++_64_probes",
-    "method": "Lanczos_200_iter"
+    "operator": "C_transpose_C",
+    "eigenvalues_exact": ["1/4", "1/4"],
+    "real_kernel_dimension": 0,
+    "determinant_exact": "1/16"
   },
-
-  "residue": {
-    "value": 0.0,
-    "error": 0.0,
-    "method": "zeta_prime_quadrature",
-    "regularization": "heat_kernel + uv_cutoff_1e-8"
+  "logdet": {
+    "value_exact": "-4*log(2)",
+    "zero_mode_convention": "ordinary_invertible",
+    "regularization": "none_finite_dimension"
   },
-
-  "tau": {
-    "phase": 0.0,
-    "modulus": 1.0,
-    "error": 0.0,
-    "path_discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "spectral_flow": { "winding_number": 0, "crossings": [] }
-  },
-
-  "entropy_witness": {
-    "kappa_max": 0.0,
-    "confidence": 0.95,
-    "nondeterminism_params": { "random_seed_base": 0, "sample_count": 0 }
-  },
-
-  "tameness": {
-    "kappa_uniform": 0.0,
-    "lambda_gap": 0.0,
-    "regime": "unspecified"
-  },
-
-  "dependencies": {
-    "merkle_root": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "input_data": [],
-    "code_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "capsule_manifest": []
-  },
-
-  "signature": {
-    "algorithm": "ed25519",
-    "public_key": "00",
-    "signature_bytes": "00"
-  }
+  "holonomy": {"status": "not_constructed", "value": null},
+  "spectral_flow": {"status": "not_asserted_for_nonselfadjoint_defect", "value": null},
+  "curvature_bound": null,
+  "physical_hopf_certificate": false,
+  "reproduction": "python -m unittest discover -s tests -v"
 }

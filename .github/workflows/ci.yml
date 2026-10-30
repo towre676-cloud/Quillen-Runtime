@@ -3,11 +3,16 @@ on:
   push: { branches: [ main ] }
   pull_request: { branches: [ main ] }
 jobs:
-  check-docs-and-schema:
+  finite-math-audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify files exist
-        run: |
-          test -f docs/Sections-4-10-Propagation-Edits.md
-          test -f receipts/schema.sample.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exact algebra and convention checks
+        run: python -m unittest discover -s tests -v
+      - name: Numerical illustration
+        run: python examples/bifurcation_audit.py
+      - name: Parse illustrative receipt
+        run: python -m json.tool receipts/schema.sample.json > /dev/null

@@ -1,162 +1,92 @@
-# Section 3: A Complete Example — Navier-Stokes Bifurcation
+# Section 3: Corrected defect audit and Hopf normal-form illustration
 
-We compute determinant-line invariants for 2D incompressible Navier-Stokes on Omega = [0, 2pi]^2 and show stability across laminar Re and a certificate-witnessed change at a Hopf bifurcation via spectral flow. (Uses mapping-cone model; Def. 2.5.)
+Status (October 30, 2026): finite-dimensional algebra and a solvable ODE,
+**not** a simulated or certified Navier–Stokes bifurcation.
 
-## Setup
+## Initial-value defect: independent proof
 
-Fourier pseudo-spectral (N = 32^2) on the divergence-free subspace gives a real state space H ~= R^{2N}.
-Time stepping: semi-implicit Euler-Maruyama with Delta t = 1e-2 to T = 10 => m = 1000 steps.
-High-k stochastic forcing amplitude sigma = 1e-4 with reproducible seed theta.
-One-step linearized maps S_i(Re): H -> H.
+The original equations define F(x)=Lx−b, b=(u₀,0,…,0), where
+(Lx)₀=x₀ and (Lx)ᵢ=xᵢ−Sᵢxᵢ₋₁ for i=1,…,m−1.
+For nonzero fixed u₀, F is affine. Its derivative L is the linear complex map.
+For y=Lx, forward substitution gives x₀=y₀, xᵢ=yᵢ+Sᵢxᵢ₋₁. Therefore L is
+invertible for every finite choice of Sᵢ. Block triangularity gives det L=1.
+F=0 has a unique solution; it has no meaningful linear kernel.
 
-## Mapping-cone complex
+With the same block metric in source and target, det(L*L)=1, all eigenvalues
+are positive, Σlog λ=0 and λ_min≤1≤λ_max. Different source/target metrics add a
+metric determinant ratio and must be declared; they do not create a kernel.
+For fixed finite m and continuous finite Sᵢ on a compact parameter interval,
+continuity gives a uniform positive gap. A small gap can indicate conditioning
+or long-time amplification, not a finite kernel crossing. If ||Sᵢ||≤q<1,
+write L=I−B with ||B||≤q to obtain σ_min(L)≥1−q. Contractivity is not necessary
+for invertibility and was not established for the claimed NS discretization.
 
-Let C^0 = C^1 = H^{\oplus m} with block L^2 inner products. Define the defect operator:
-    (D_Re x)_0 = x_0 - u_0
-    (D_Re x)_i = x_i - S_i(Re) x_{i-1}   for i = 1..m-1
+Minimal counterexample: m=1, H=R, L=[1], independently of any parameter.
+A nontrivial scalar two-time example is L=[[1,0],[−1,1]], with
+LᵀL=[[2,−1],[−1,1]], eigenvalues (3±√5)/2, determinant one, nullity zero,
+and log determinant zero.
 
-Complex: C^•: C^0 --(partial^0 = D_Re)--> C^1, partial^1 = 0.
-Laplacians: Delta^0 = D_Re^* D_Re, Delta^1 = D_Re D_Re^*.
-Lemma 2.6: Delta^0 and Delta^1 share the same positive spectrum (counting multiplicity).
+The old illustrative minima 2.4 and 1.1 are impossible for this operator. The
+claimed real one-dimensional kernel, SF=+1, R=3520.3, Reynolds thresholds near
+65/70 and receipt error/confidence/hash claims are withdrawn. Even the plausible
+looking table rows were not measurements. If an eigenvalue of another operator
+tends to zero while the others remain positive and bounded, Σlog λ tends to
+**negative** infinity. At the singular point a primed sum excludes zeros and is
+a different, possibly finite quantity. See Section 2 for regularization details.
 
-Tameness. For Re below the Hopf point, each S_i is contractive on the divergence-free subspace, so D_Re is injective with closed range and lambda_min(Delta^0) >= lambda_* > 0. At Hopf, lambda_min -> 0.
+## Omitted boundary conditions cannot be presumed
 
-## Spectral summary (illustrative)
+The initial row fixes x₀. No periodic condition was present. Dropping that row
+leaves a rectangular recurrence with an H-dimensional kernel at every parameter.
+A periodic alternative is (Cx)₀=x₀−S_m x_{m−1}, with the remaining recurrence
+rows unchanged. Let M=S_m S_{m−1}…S₁. Eliminating interior variables by unit
+triangular operations gives det C=det(I−M) and ker C≅ker(I−M).
+For m=1, C=I−S₁ (both contributions occupy the same block).
+Thus the periodic defect detects multiplier **one**, not every multiplier on
+the unit circle. Autonomous periodic orbits already have a phase multiplier one;
+a phase condition and often an unknown period are needed for continuation.
 
-| Re | dim ker Delta^0 | lambda_min | lambda_max | kappa |
-|----|------------------|-----------:|-----------:|------:|
-| 40 | 0                | 2.4        | 5.8e2      | 2.4e2 |
-| 50 | 0                | 1.1        | 6.2e2      | 5.6e2 |
-| 60 | 0                | 0.30       | 6.6e2      | 2.2e3 |
-| 70 | 1                | approx 0   | 6.9e2      |  inf  |
+## Corrected exact example
 
-The smallest nonzero singular value decays toward zero as Re -> Re_c, signaling loss of tameness; at Re ~ 65 a one-dimensional kernel appears (spectral flow +1).
+Let J=[[0,−1],[1,0]], A(μ)=μI+J, T=2π. The exact equilibrium variational flow has
+M(μ)=exp(TA)=exp(2πμ)I. Put r=exp(2πμ). Then C=(1−r)I and
+Δ=CᵀC=(1−r)²I. Rational choices give exact matrices:
 
-## Residue (zeta'-logdet)
+| r | μ | Δ spectrum | real nullity C | det C | R away from singularity |
+|---|---|---|---:|---:|---|
+| 1/2 | −log(2)/(2π) | 1/4, 1/4 | 0 | 1/4 | −4log(2) |
+| 1 | 0 | 0, 0 | 2 | 0 | undefined; limiting value −∞ |
+| 2 | log(2)/(2π) | 1, 1 | 0 | 1 | 0 |
 
-Because Delta^1 and Delta^0 share nonzero spectra (Lemma 2.6),
-    R(M_{Re,theta}) = - zeta'(Delta^1, 0) = sum_j log lambda_j(Re).
-We evaluate via Hutch++ / Lanczos log-det with a UV cutoff and heat-kernel extrapolation at small t.
-In the tame (laminar) window the sum is finite and slowly varying in Re; at the Hopf crossing a single lambda_j -> 0^+ drives R -> +inf, which the runtime flags as non-tame.
+At r=1 det' Δ=1 by the empty-product convention. The resonant real plane has
+dimension two (one complex dimension). det C has no sign change and the positive
+Laplacian has no signed SF. Choosing a nonresonant T can miss multiplier one at
+μ=0 even when a Hopf bifurcation exists.
 
-## tau via spectral flow (Bismut-Freed)
+Now specify the nonlinear ODE z'=(μ+i)z−|z|²z. Polar coordinates give
+ρ'=μρ−ρ³, θ'=1. For μ<0 the origin is asymptotically stable; for μ>0 it is
+unstable with a stable cycle ρ=√μ of period 2π, radial derivative −2μ.
+Eigenvalues μ±i cross with nonzero speed, and the cubic radial coefficient is −1.
+These direct formulas prove this ODE's supercritical Hopf bifurcation. The
+linear equation z'=(μ+i)z has the same equilibrium monodromy but no nonzero
+periodic orbit for μ≠0. Monodromy singularity alone is insufficient.
 
-On Re in [40, 60] we have ker Delta_* = empty, so the Berry-Quillen 1-form alpha = Tr(P dP/dRe) dRe vanishes and tau = exp(int alpha) = 1.
-Across a simple Hopf crossing, the closed-loop holonomy is exp(i pi SF) with spectral flow SF = +/- 1. On an open path (e.g. 40 -> 70) record spectral_flow.winding_number = 1 and a regularization hash; the value of tau along the open interval remains unimodular (approx 1).
+For contrast B(t)=diag(t,1), t∈[−1,1], is self-adjoint with SF=+1 and real
+nullity one at zero. Its square has eigenvalues t²,1 and loses the crossing sign.
+This is a separate signed-crossing example, not a derived NS invariant.
 
-## Entropy witness
+## Reproduction and remaining physical proof obligations
 
-Lift to (Re, theta) -> D_{Re,theta} and bound the curvature two-form K of the induced local system over Sigma = [Re, Re'] x {theta_k}. We record a high-confidence upper bound kappa_max on int_Sigma ||K||, which controls the verification inequality (Thm 2.4 / Cor. 3.1).
+Run `python -m unittest discover -s tests -v` and
+`python examples/bifurcation_audit.py`. Rational algebra tests verify boundary
+elimination and the replacement table; floating-point output independently
+illustrates spectra/log sums. This is not interval-certified PDE evidence.
 
-## Receipt excerpt (laminar, Re = 40)
-
-    {
-      "complex_profile": { "dims": ["H^⊕m","H^⊕m"], "model": "mapping_cone_D" },
-      "gauge_normalization_data": {
-        "inner_product_basis": "Fourier_L2",
-        "adjoint_convention": "Hermitian_conjugate",
-        "conformal_factors": { "C^0": 0.0, "C^1": 0.0 }
-      },
-      "spectra": {
-        "degree_0_operator": "Delta0 = D_star_D",
-        "shared_nonzero_with_degree_1": true,
-        "lambda_min": 2.4,
-        "lambda_max": 580.0,
-        "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
-        "trace_estimator": "hutch++_64_probes",
-        "method": "Lanczos_200_iter"
-      },
-      "residue": {
-        "value": 3520.3,
-        "error": 1.2,
-        "method": "zeta_prime_quadrature",
-        "regularization": "heat_kernel + uv_cutoff_1e-8"
-      },
-      "tau": {
-        "phase": 0.0001,
-        "modulus": 1.0,
-        "error": 0.0003,
-        "path_discretization_hash": "sha256:b8c7a6d5e4f3dd81cc193d46c650d0bcf67155f64f888ced1138b97f38925ae6",
-        "spectral_flow": { "winding_number": 0, "crossings": [] }
-      },
-      "entropy_witness": {
-        "kappa_max": 0.9,
-        "confidence": 0.95,
-        "nondeterminism_params": { "random_seed_base": 42, "sample_count": 20 }
-      },
-      "tameness": { "kappa_uniform": 242, "lambda_gap": 2.4, "regime": "Re_40_stable_laminar" }
-    }
-
-## Verification (sketch)
-
-1) Rebuild D_Re and check lambda_min / lambda_max of Delta^0 via Lanczos.
-2) Compute -zeta'(Delta^1, 0) via log-det quadrature.
-3) Integrate Tr(P dP/dRe) along the recorded grid (tau approx 1 on laminar window).
-4) Compare receipts with Thm 2.4 / Cor. 3.1; failure near Hopf certifies drift.
-
----
-
-## Residue (zeta–regularized log-det)
-Let \( \Delta^0 = D_{\mathrm{Re}}^{\!*} D_{\mathrm{Re}} \) and \( \Delta^1 = D_{\mathrm{Re}} D_{\mathrm{Re}}^{\!*} \).
-By Lemma 2.6 they share the nonzero spectrum \( \{\lambda_j(\mathrm{Re})\}_{j\ge 1} \).
-The residue is
-\( R(M_{\mathrm{Re},\theta}) = -\zeta'(\Delta^1,0) = \sum_{j\ge 1} \log \lambda_j(\mathrm{Re}) \),
-computed via Hutch++/Lanczos log-det on Δ¹ with a UV cutoff and heat-kernel extrapolation as \(t\to 0^+\).
-In the laminar (tame) regime, R varies slowly with Re; at a Hopf crossing, a single \( \lambda_j \to 0^+ \) drives \( R \to +\infty \), which we treat as an anomaly flag (non‑tame endpoint).
-
-## τ via Bismut–Freed connection and spectral flow
-For a smooth family \( \mathrm{Re}\mapsto D_{\mathrm{Re}} \) with \( \ker D_{\mathrm{Re}}=\{0\} \),
-the Berry–Quillen one‑form is \( \alpha = \mathrm{Tr}(P\,\partial_{\mathrm{Re}} P)\,d\mathrm{Re} \) with P the harmonic projector, hence
-\( \tau = \exp(\int_{\mathrm{Re}_0}^{\mathrm{Re}_1}\alpha) \).
-On [40,60] we have \(P\equiv 0 \Rightarrow \alpha=0 \Rightarrow \tau=1\).
-Across a simple Hopf crossing, the determinant‑line holonomy around a small loop is \( e^{i\pi\,\mathrm{SF}} \) with spectral flow SF=+1 giving −1.
-On the open path 40→70 the value remains \( \tau \approx 1 \), and we record the topological data as spectral_flow.winding_number=1 plus a regularization hash (mollifier width ε).
-
-## Entropy witness (nondeterminism curvature bound)
-Lift the family to \( (\mathrm{Re},\theta)\mapsto D_{\mathrm{Re},\theta} \) (RNG seed θ).
-Let K denote the curvature two‑form of the induced local system over
-\( \Sigma=[\mathrm{Re},\mathrm{Re}']\times\{\theta_k\}_{k=1}^N \).
-We bound \( \int_\Sigma \|K\| \) empirically by repeated runs and report a high‑confidence upper bound \( \kappa_{\max} \).
-By Theorem 2.4 and Corollary 3.1,
-\( |\log \tau(\mathrm{Re})-\log \tau(\mathrm{Re}')| \le \int_\Sigma \|K\| \) and
-\( |R(\mathrm{Re})-R(\mathrm{Re}')| \le C \int_\Sigma \|K\| \) with \( C \asymp \kappa_{\max}/\lambda_{\min} \).
-
-## Receipt excerpt (laminar run, Re=40)
-    
-    {
-      "complex_profile": { "dims": ["H^⊕m","H^⊕m"], "model": "mapping_cone_D" },
-      "gauge_normalization_data": {
-        "inner_product_basis": "Fourier_L2",
-        "adjoint_convention": "Hermitian_conjugate",
-        "conformal_factors": {"C^0": 0.0, "C^1": 0.0}
-      },
-      "spectra": {
-        "degree_0_operator": "Delta0 = D_star_D",
-        "shared_nonzero_with_degree_1": true,
-        "lambda_min": 2.4,
-        "lambda_max": 580.0,
-        "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
-        "trace_estimator": "hutch++_64_probes",
-        "method": "Lanczos_200_iter"
-      },
-      "residue": {
-        "value": 3520.3,
-        "error": 1.2,
-        "method": "zeta_prime_quadrature",
-        "regularization": "heat_kernel + uv_cutoff_1e-8"
-      },
-      "tau": {
-        "phase": 0.0001,
-        "modulus": 1.0,
-        "error": 0.0003,
-        "path_discretization_hash": "sha256:b8c7a6d5e4f3...",
-        "spectral_flow": { "winding_number": 0, "crossings": [] }
-      },
-      "entropy_witness": {
-        "kappa_max": 0.9,
-        "confidence": 0.95,
-        "nondeterminism_params": { "random_seed_base": 42, "sample_count": 20 }
-      },
-      "tameness": { "kappa_uniform": 242, "lambda_gap": 2.4, "regime": "Re_40_stable_laminar" }
-    }
-
+A Navier–Stokes certificate still needs domain and boundary conditions,
+divergence-free basis and zero-mode handling, forcing and equilibrium branch,
+convergence and validated spectral error bounds, an isolated conjugate pair with
+transverse imaginary-axis crossing, exclusion of other critical spectrum, and
+nonlinear nondegeneracy. A stochastic model requires a separately stated random
+bifurcation notion. A fixed seed is not a deterministic Hopf theorem. None of
+these physical proofs or data is supplied here. The former dimension count,
+contractivity assertion and time-step specification were not validated evidence.
