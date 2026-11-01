@@ -54,3 +54,15 @@ python examples/hopf_spectra.py
 Both commands use only the Python standard library. The
 [example receipt](receipts/schema.sample.json) records exact matrix entries,
 metrics, zero-mode conventions, and determinant data in a reproducible form.
+
+## Validated matrix inputs
+
+The [computed matrix certificate interface](docs/Validated-Matrix-Certificates.md)
+derives spectral gaps, operator errors, residuals and state norms from exact
+rational matrix enclosures. It produces replayable determinant and solution
+certificates, including nonnormal periodic return maps from validated step boxes.
+
+```bash
+python examples/validated_return_map.py
+python examples/validated_return_map.py --replay receipts/validated_return_map.json
+```

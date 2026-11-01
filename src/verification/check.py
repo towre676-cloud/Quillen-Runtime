@@ -1,9 +1,10 @@
 """Evaluate spectral and solution-error bounds from supplied norm enclosures."""
 import math
+from fractions import Fraction
 
 
 def _nonnegative_finite(value, name):
-    if not math.isfinite(value) or value < 0:
+    if value < 0 or (not isinstance(value, (int, Fraction)) and not math.isfinite(value)):
         raise ValueError(f'{name} must be finite and nonnegative')
 
 
