@@ -1,65 +1,54 @@
 {
-  "receipt_version": "1.0.0",
-  "run_id": "00000000-0000-0000-0000-000000000000",
-  "timestamp_utc": "1970-01-01T00:00:00Z",
-  "kernel_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-
-  "complex_profile": { "dims": ["H^m","H^m"], "model": "mapping_cone_D" },
-
-  "gauge_normalization_data": {
-    "inner_product_basis": "Fourier_L2",
-    "adjoint_convention": "Hermitian_conjugate",
-    "conformal_factors": { "C^0": 0.0, "C^1": 0.0 },
-    "discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  "receipt_version": "2.0.0",
+  "operator": {
+    "model": "periodic_monodromy_defect",
+    "boundary_condition": "periodic",
+    "field": "real",
+    "dimension": 2,
+    "matrix": [
+      [
+        "1/2",
+        "0"
+      ],
+      [
+        "0",
+        "1/2"
+      ]
+    ],
+    "source_metric": "Euclidean",
+    "target_metric": "Euclidean"
   },
-
   "spectra": {
-    "degree_0_operator": "Delta0 = D_star_D",
-    "shared_nonzero_with_degree_1": true,
-    "lambda_min": 0.0,
-    "lambda_max": 0.0,
-    "eigenvalues_compressed": "lanczos_extremal_20_interior_980",
-    "trace_estimator": "hutch++_64_probes",
-    "method": "Lanczos_200_iter"
+    "operator": "C_transpose_C",
+    "eigenvalues_exact": [
+      "1/4",
+      "1/4"
+    ],
+    "real_kernel_dimension": 0,
+    "determinant_exact": "1/16"
   },
-
-  "residue": {
-    "value": 0.0,
-    "error": 0.0,
-    "method": "zeta_prime_quadrature",
-    "regularization": "heat_kernel + uv_cutoff_1e-8"
+  "logdet": {
+    "value_exact": "-4*log(2)",
+    "zero_mode_convention": "ordinary_invertible",
+    "regularization": "none_finite_dimension"
   },
-
-  "tau": {
-    "phase": 0.0,
-    "modulus": 1.0,
-    "error": 0.0,
-    "path_discretization_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "spectral_flow": { "winding_number": 0, "crossings": [] }
+  "reproduction": "python -m unittest discover -s tests -v",
+  "example": "resonant_hopf_equilibrium",
+  "parameters": {
+    "period_exact": "2*pi",
+    "mu_exact": "-log(2)/(2*pi)",
+    "monodromy_radius_exact": "1/2"
   },
-
-  "entropy_witness": {
-    "kappa_max": 0.0,
-    "confidence": 0.95,
-    "nondeterminism_params": { "random_seed_base": 0, "sample_count": 0 }
-  },
-
-  "tameness": {
-    "kappa_uniform": 0.0,
-    "lambda_gap": 0.0,
-    "regime": "unspecified"
-  },
-
-  "dependencies": {
-    "merkle_root": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "input_data": [],
-    "code_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "capsule_manifest": []
-  },
-
-  "signature": {
-    "algorithm": "ed25519",
-    "public_key": "00",
-    "signature_bytes": "00"
+  "operator_neighborhood_certificate": {
+    "metric": "Euclidean_operator_norm",
+    "radius_exact": "1/100",
+    "reference_singular_gap_exact": "1/2",
+    "guaranteed_singular_gap_exact": "49/100",
+    "absolute_logdet_error_bound_exact": "-4*log(49/50)",
+    "real_determinant_sign": 1,
+    "reference_residual_norm_upper_exact": "1/1000000",
+    "candidate_state_norm_upper_exact": "1",
+    "solution_error_upper_exact": "10001/490000",
+    "absolute_logdet_error_upper_rational": "4/49"
   }
 }

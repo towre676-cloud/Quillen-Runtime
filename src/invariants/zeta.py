@@ -1,8 +1,10 @@
-"""
-zeta.py
-Scaffold for residue and log-determinant evaluation:
+"""Finite spectral determinants with explicit zero-mode conventions."""
+import math
 
-- Residue R(M) = -zeta'(Delta1, 0) = sum_j log(lambda_j) over positive spectrum.
-- Practical evaluation: Lanczos-based log-det with heat-kernel extrapolation.
-"""
-# Implementation to be added. This file exists so other modules can import it.
+def positive_logdet(eigenvalues, *, omit_zeros=False):
+    values = list(eigenvalues)
+    if any(not math.isfinite(x) or x < 0 for x in values):
+        raise ValueError('finite nonnegative spectrum required')
+    if not omit_zeros and any(x == 0 for x in values):
+        raise ValueError('singular: request an explicit primed convention')
+    return math.fsum(math.log(x) for x in values if x > 0)
