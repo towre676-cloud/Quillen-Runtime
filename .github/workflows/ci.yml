@@ -1,7 +1,7 @@
 name: ci
 on:
   push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  pull_request: {}
 jobs:
   spectral-certificates:
     runs-on: ubuntu-latest
@@ -16,3 +16,8 @@ jobs:
         run: python examples/hopf_spectra.py
       - name: Parse illustrative receipt
         run: python -m json.tool receipts/schema.sample.json > /dev/null
+      - name: Computed enclosure certificate and replay
+        run: |
+          python examples/validated_return_map.py > /tmp/validated_return_map.json
+          diff receipts/validated_return_map.json /tmp/validated_return_map.json
+          python examples/validated_return_map.py --replay receipts/validated_return_map.json
