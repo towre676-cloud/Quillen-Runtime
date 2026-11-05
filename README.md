@@ -66,3 +66,7 @@ certificates, including nonnormal periodic return maps from validated step boxes
 python examples/validated_return_map.py
 python examples/validated_return_map.py --replay receipts/validated_return_map.json
 ```
+
+## DynaComp sampled-step bridge
+
+The [cross-project bridge](docs/DynaComp-Bridge.md) converts replayed bounded DynaComp descriptor/ZOH transformations into interval return maps. Exact noncommuting products feed the existing determinant and solution certificates. The pinned DynaComp producer is an optional dependency, tested explicitly by CI; unsupported/unbounded transformations are rejected.

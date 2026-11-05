@@ -1,0 +1,10 @@
+{
+  "baseline": "325c9b6a44f162bb299cfcb254a36bb73c2f8cf8",
+  "producer": "towre676-cloud/DynaComp@cd788c7ac695728e3f5b22056a0f99a2c1e1463c",
+  "checks": {
+    "tests": 27,
+    "skips": 0,
+    "receipt_replay": "passed"
+  },
+  "scope": "Existing exact matrix-enclosure API plus new sampled-step bridge; producer containment hypotheses retained."
+}
