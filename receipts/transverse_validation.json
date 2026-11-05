@@ -1,0 +1,73 @@
+{
+  "base": "4acfb7801266958cee50756ca411f6e0cd7dc043",
+  "producer": "cd788c7ac695728e3f5b22056a0f99a2c1e1463c",
+  "tests": 46,
+  "results": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/hopf_spectra.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/validated_return_map.py",
+        "--replay",
+        "receipts/validated_return_map.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/dynacomp_return.py",
+        "--replay",
+        "receipts/dynacomp_return.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/transverse_return.py",
+        "--replay",
+        "receipts/transverse_return.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/check_transverse.py",
+        "receipts/transverse_return.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "check": "validated_return_map byte reproduction",
+      "passed": true
+    },
+    {
+      "check": "dynacomp_return byte reproduction",
+      "passed": true
+    },
+    {
+      "check": "transverse_return byte reproduction",
+      "passed": true
+    }
+  ]
+}
