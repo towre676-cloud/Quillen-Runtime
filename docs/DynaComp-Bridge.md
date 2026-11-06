@@ -60,10 +60,12 @@ source implementations and the stated mathematical arguments.
 
 No neutral direction is removed automatically. If a periodic monodromy has a unit
 multiplier, the full return defect may be singular and must fail certification.
-For an independently established invariant transverse subspace with exact basis
-Q and left inverse L (LQ=I), a restricted defect would be I-L S Q; interval
-products could enclose it once invariance and coordinate/metric conventions are
-proved. Merely deleting one row/column does not prove this restriction.
+The proposed [transverse certificate extension](Transverse-Return-Certificates.md)
+checks exact generator/discrete-map invariance for a supplied rational basis Q
+and left inverse L (LQ=I), then encloses the restricted defect I-L S Q using the
+existing machinery. Optional complete fixed neutral complements are checked
+separately, and coordinate/ambient metric bounds are distinguished. Merely
+deleting one row/column does not prove this restriction.
 For a Poincare section with normal n and orbit velocity f, the projection
 I-f n^T/(n^T f) additionally requires a certified nonzero transversality margin,
 validated f and n, return-time derivatives, and an established orbit. None is

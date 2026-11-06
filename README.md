@@ -70,3 +70,16 @@ python examples/validated_return_map.py --replay receipts/validated_return_map.j
 ## DynaComp sampled-step bridge
 
 The [cross-project bridge](docs/DynaComp-Bridge.md) converts replayed bounded DynaComp descriptor/ZOH transformations into interval return maps. Exact noncommuting products feed the existing determinant and solution certificates. The pinned DynaComp producer is an optional dependency, tested explicitly by CI; unsupported/unbounded transformations are rejected.
+
+## Certified invariant transverse restrictions
+
+The [transverse extension](docs/Transverse-Return-Certificates.md) checks exact
+left inverses, generator or discrete-map invariance, and optional complete fixed
+neutral complements before certifying restricted return defects. It reuses the
+merged sampling and enclosure machinery and records coordinate and ambient
+metric bounds separately. Nonlinear orbits and Poincare sections remain external.
+
+```bash
+PYTHONPATH=../DynaComp/src python examples/transverse_return.py --replay receipts/transverse_return.json
+PYTHONPATH=../DynaComp/src python examples/check_transverse.py receipts/transverse_return.json
+```

@@ -35,3 +35,7 @@ jobs:
           python examples/dynacomp_return.py --replay receipts/dynacomp_return.json
           python examples/dynacomp_return.py > /tmp/dynacomp_return.json
           diff receipts/dynacomp_return.json /tmp/dynacomp_return.json
+          python examples/transverse_return.py --replay receipts/transverse_return.json
+          python examples/check_transverse.py receipts/transverse_return.json
+          python examples/transverse_return.py > /tmp/transverse_return.json
+          diff receipts/transverse_return.json /tmp/transverse_return.json
