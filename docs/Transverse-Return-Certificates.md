@@ -182,6 +182,21 @@ stack. The trusted base still includes Python rational arithmetic, both merged
 implementations, source-bound exponential evidence and the mathematical
 arguments above. Hashes bind source versions, not formal correctness.
 
+For maintained production use, install the complete DynaComp checkout at the
+pinned commit above and preserve the Quillen revision with each receipt. The
+step receipt hashes `dynacomp.engineering`, `dynacomp.rational`, and
+`dynacomp.machine`; this is not a transitive dependency manifest. Replay compares
+these hashes against the currently imported modules, rather than enforcing a
+built-in approved-commit list. Agreement between generation and replay under a
+different installation does not establish that the audited dependency pin was
+used. CI supplies the complete commit pin; deployment must preserve it too.
+
+A positive restricted defect gap proves invertibility and conditioning of
+`I-R`. It does not prove dynamical stability of `R`: multipliers outside the
+unit circle are compatible with an invertible defect. The coordinate and
+ambient lower bounds are conservative certificates, not asserted optimal
+singular values.
+
 Rejections include row/column-deletion compressions with leakage, tiny exact
 nonzero leakage, invalid left inverses, dependent neutral vectors, nonneutral
 complements, zero-containing interval residuals, a singular reduced defect,
